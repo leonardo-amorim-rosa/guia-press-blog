@@ -34,10 +34,14 @@ router.post("/admin/categories/save", (req, res) => {
 		Category.create({
 			title: title,
 			slug: slugigy(title),
+		}).then(result => {
+			res.redirect("/admin/categories");
+		}).catch(error => {
+			console.error(error);
+			res.redirect("/admin/categories");
 		});
-		res.redirect("/admin/categories?cat=" + title);
 	} else {
-		res.redirect("/admin/categories?cat=" + title);
+		res.redirect("/admin/categories");
 	}
 });
 
@@ -52,6 +56,49 @@ router.post("/admin/categories/delete", (req, res) => {
 		} else {
 			res.redirect("/admin/categories");
 		}
+	} else {
+		res.redirect("/admin/categories");
+	}
+});
+
+router.get("/admin/categories/edit/:id", (req, res) => {
+	const id = req.params.id;
+
+	if (isNaN(id)) {
+		res.redirect("/admin/categories");
+	}
+
+	Category.findByPk(id).then(category => {
+		if (category != undefined) {
+			res.render("admin/categories/edit", { category: category });
+		} else {
+			res.redirect("/admin/categories");
+		}
+	}).catch(error => {
+		console.error(error);
+		res.redirect("/admin/categories");
+	});
+});
+
+router.post("/admin/categories/update", (req, res) => {
+	let id = req.body.id;
+	let title = req.body.title;
+
+	if (title != undefined && id != undefined) {
+		Category.update({
+			title: title,
+			slug: slugigy(title),
+		}, {
+			where: {
+				id: id
+			}
+		}).then(result => {
+			res.redirect("/admin/categories");
+		}).catch(error => {
+			console.error(error);
+			res.redirect("/admin/categories");
+		});
+
 	} else {
 		res.redirect("/admin/categories");
 	}
