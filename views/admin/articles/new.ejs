@@ -7,11 +7,17 @@
       <h3>Novo Artigo</h3>
     </div>
     <div class="card-body">
-      <form action="/admin/articles/save" method="post">
+      <form action="/articles/save" method="post">
         <input type="text" name="title" id="title" class="form-control" placeholder="Título do artigo"><br>
         <textarea name="article" id="article" class="form-control" placeholder="Escreva o artigo aqui!"></textarea>
         <br>
-        <button class="btn btn-success">Cadastrar</button>
+        <select name="category" id="category" class="form-control">
+          <% categories.forEach(category => { %>
+          <option value="<%= category.id %>"><%= category.title %></option>
+          <% }) %>
+        </select>
+        <br>
+        <button class=" btn btn-success">Cadastrar</button>
       </form>
     </div>
   </div>
@@ -24,6 +30,7 @@
     language: "pt_BR",
     selector: "#article",
     promotion: false,
+    branding: false,
     plugins: 'advlist autolink link image lists print preview wordcount fullscreen insertdatetime media save table paste emoticons'
   })
 </script>
