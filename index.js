@@ -17,10 +17,12 @@ connection
 // models
 const Category = require("./categories/Category");
 const Article = require("./articles/Article");
+const User = require("./users/User");
 
 // rotas
 const categoriesController = require("./categories/CategoriesController");
 const articlesController = require("./articles/ArticlesController");
+const usersController = require("./users/UsersController");
 
 // EJS config
 app.set("view engine", "ejs");
@@ -34,6 +36,7 @@ app.use(bodyParser.json());
 
 app.use("/", categoriesController);
 app.use("/", articlesController);
+app.use("/", usersController);
 
 app.get("/", (req, res) => {
 	Article.findAll({
