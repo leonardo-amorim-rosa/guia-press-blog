@@ -1,8 +1,14 @@
 const express = require("express");
 const app = express();
-
 const bodyParser = require("body-parser");
 const connection = require("./database/database");
+const session = require("express-session");
+
+// Sessions
+app.use(session({
+	secret: "erefrtrtrt44343dfdfsdsds2222fg",
+	cookie: { maxAge: 30000 }
+}));
 
 // Database connection
 connection
@@ -37,6 +43,20 @@ app.use(bodyParser.json());
 app.use("/", categoriesController);
 app.use("/", articlesController);
 app.use("/", usersController);
+
+app.get("/sessions", (req, res) => {
+	req.session.treinamento = "Formação Node JS";
+	req.session.ano = 2024
+	res.send("Session created!");
+})
+
+app.get("/sessions/read", (req, res) => {
+	res.json({
+		treinamento: req.session.treinamento,
+		ano: req.session.ano
+	});
+});
+
 
 app.get("/", (req, res) => {
 	Article.findAll({
